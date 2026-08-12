@@ -1,0 +1,13 @@
+{
+  "spam": "src/spam.py",
+  "autofarm": "src/auto_farm.py",
+  "chat-manager": "src/chat_manager.py",
+  "nekospy": "src/nekospy.py",
+  "rand": "src/rand.py",
+  "afk": "src/afk.py",
+  "tictactoe": "src/tictactoe.py",
+  "trashguy": "src/trashguy.py",
+  "type": "src/type.py",
+  "uwu-mode": "src/uwu_mode.py",
+  "yamusic": "src/yamusic.py"
+}
