@@ -3,7 +3,7 @@
     "path": "src/spam.py",
     "name": "Spammer",
     "desc": "Модуль для спама сообщениями в чаты. Команды: .spam и .stopspam",
-    "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".spam", ".stopspam"]
   },
   "autofarm": {
@@ -17,7 +17,7 @@
     "path": "src/chat_manager.py",
     "name": "Chat Manager",
     "desc": "Полный комплекс модерации: муты, баны, кики, варны, пурж, пины и права",
-    "image": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".mute", ".unmute", ".ban", ".unban", ".kick", ".warn", ".unwarn", ".del", ".purge", ".pin", ".unpin", ".promote", ".demote", ".slowmode", ".admins"]
   },
   "nekospy": {
@@ -32,14 +32,14 @@
     "path": "src/rand.py",
     "name": "Rand",
     "desc": "Модуль для генерации случайных чисел в заданных границах",
-    "image": "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".rand"]
   },
   "afk": {
     "path": "src/afk.py",
     "name": "AFK",
     "desc": "Автоответчик для ЛС и чатов. Снимается сам при активности или по команде",
-    "image": "https://images.unsplash.com/photo-1511295742362-92c96b124e52?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".afk", ".afkhere", ".unafk"]
   },
   "tictactoe": {
@@ -61,7 +61,7 @@
     "path": "src/type.py",
     "name": "Type text",
     "desc": "Печатает текст с эффектом печатной машинки и мигающим курсором",
-    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".type"]
   },
   "uwu-mode": {
@@ -85,6 +85,6 @@
     "desc": "Известная TikTok анимация переливающихся сердечек",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/LoveMagic%20module.png?raw=true",
     "commands": [".ily", ".ilygay", "ilyi", ".ilygayi"],
-    "requires": ["aiohttp", "requests", "pillow", "yandex-music"]
+    "requires": ["aiohttp"]
   }
 }
