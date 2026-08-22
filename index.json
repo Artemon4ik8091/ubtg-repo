@@ -8,14 +8,14 @@
   },
   "autofarm": {
     "path": "src/auto_farm.py",
-    "name": "Автофарм",
+    "name": "autofarm",
     "desc": "Раз в заданный интервал шлет сообщение в целевой чат",
     "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
     "commands": [".farm"]
   },
   "chat-manager": {
     "path": "src/chat_manager.py",
-    "name": "Чат Менеджер",
+    "name": "Chat Manager",
     "desc": "Полный комплекс модерации: муты, баны, кики, варны, пурж, пины и права",
     "image": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&auto=format&fit=crop&q=80",
     "commands": [".mute", ".unmute", ".ban", ".unban", ".kick", ".warn", ".unwarn", ".del", ".purge", ".pin", ".unpin", ".promote", ".demote", ".slowmode", ".admins"]
@@ -77,6 +77,14 @@
     "desc": "Яндекс.Музыка: автобио по треку, красивый баннер и инфо о том, что играет сейчас",
     "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
     "commands": [".ynow", ".ynowt", ".ylike", ".yunlike", ".ybio", ".yset", ".yguide"],
+    "requires": ["aiohttp", "requests", "pillow", "yandex-music"]
+  },
+  "lovemagic": {
+    "path": "src/ily.py",
+    "name": "LoveMagic",
+    "desc": "Известная TikTok анимация переливающихся сердечек",
+    "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
+    "commands": [".ily", ".ilygay", "ilyi", ".ilygayi"],
     "requires": ["aiohttp", "requests", "pillow", "yandex-music"]
   }
 }
