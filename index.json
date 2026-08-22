@@ -10,7 +10,7 @@
     "path": "src/auto_farm.py",
     "name": "autofarm",
     "desc": "Раз в заданный интервал шлет сообщение в целевой чат",
-    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Autofarm%20module.png?raw=true",
     "commands": [".farm"]
   },
   "chat-manager": {
@@ -24,7 +24,7 @@
     "path": "src/nekospy.py",
     "name": "Nekospy",
     "desc": "Шпионский модуль: перехват одноразовых медиа и лог удаленных/измененных сообщений",
-    "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Nekospy%20module.png?raw=true",
     "commands": [".onetime", ".pmspy", ".onetimedump"],
     "requires": ["telethon"]
   },
@@ -46,14 +46,14 @@
     "path": "src/tictactoe.py",
     "name": "TicTacToe",
     "desc": "Интерактивная игра в Крестики-Нолики (PvP и против Бота) с инлайн-кнопками",
-    "image": "https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/TicTacToe%20module.png?raw=true",
     "commands": [".ttt", ".tictactoe"]
   },
   "trashguy": {
     "path": "src/trashguy.py",
     "name": "TrashGuy",
     "desc": "Анимация человечка, который выкидывает мусор. С настройкой скорости",
-    "image": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/TrashGuy%20module.png?raw=true",
     "commands": [".tguy"],
     "requires": ["grapheme"]
   },
@@ -68,14 +68,14 @@
     "path": "src/uwu_mode.py",
     "name": "UwU Mode",
     "desc": "Автоматически превращает твои сообщения в милые (заикание, каомодзи, действия)",
-    "image": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Uwu-mode%20module.png?raw=true",
     "commands": [".uwu"]
   },
   "yamusic": {
     "path": "src/yamusic.py",
     "name": "YaMusic",
     "desc": "Яндекс.Музыка: автобио по треку, красивый баннер и инфо о том, что играет сейчас",
-    "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/YaMusic%20module.png?raw=true",
     "commands": [".ynow", ".ynowt", ".ylike", ".yunlike", ".ybio", ".yset", ".yguide"],
     "requires": ["aiohttp", "requests", "pillow", "yandex-music"]
   },
@@ -83,7 +83,7 @@
     "path": "src/ily.py",
     "name": "LoveMagic",
     "desc": "Известная TikTok анимация переливающихся сердечек",
-    "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/LoveMagic%20module.png?raw=true",
     "commands": [".ily", ".ilygay", "ilyi", ".ilygayi"],
     "requires": ["aiohttp", "requests", "pillow", "yandex-music"]
   }
