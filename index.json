@@ -86,5 +86,13 @@
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/LoveMagic%20module.png?raw=true",
     "commands": [".ily", ".ilygay", "ilyi", ".ilygayi"],
     "requires": ["aiohttp"]
+  },
+  "dmute": {
+    "path": "src/dmute.py",
+    "name": "Delete Mute",
+    "desc": "Мутит пользователей путем мгновенного удаления их новых сообщений.",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [".dmute", ".dunmute", ".dmutelist"],
+    "requires": ["aiohttp"]
   }
 }
