@@ -1,13 +1,82 @@
 {
-  "spam": "src/spam.py",
-  "autofarm": "src/auto_farm.py",
-  "chat-manager": "src/chat_manager.py",
-  "nekospy": "src/nekospy.py",
-  "rand": "src/rand.py",
-  "afk": "src/afk.py",
-  "tictactoe": "src/tictactoe.py",
-  "trashguy": "src/trashguy.py",
-  "type": "src/type.py",
-  "uwu-mode": "src/uwu_mode.py",
-  "yamusic": "src/yamusic.py"
+  "spam": {
+    "path": "src/spam.py",
+    "name": "Spammer",
+    "desc": "Модуль для спама сообщениями в чаты. Команды: .spam и .stopspam",
+    "image": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&auto=format&fit=crop&q=80",
+    "commands": [".spam", ".stopspam"]
+  },
+  "autofarm": {
+    "path": "src/auto_farm.py",
+    "name": "Автофарм",
+    "desc": "Раз в заданный интервал шлет сообщение в целевой чат",
+    "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=80",
+    "commands": [".farm"]
+  },
+  "chat-manager": {
+    "path": "src/chat_manager.py",
+    "name": "Чат Менеджер",
+    "desc": "Полный комплекс модерации: муты, баны, кики, варны, пурж, пины и права",
+    "image": "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=800&auto=format&fit=crop&q=80",
+    "commands": [".mute", ".unmute", ".ban", ".unban", ".kick", ".warn", ".unwarn", ".del", ".purge", ".pin", ".unpin", ".promote", ".demote", ".slowmode", ".admins"]
+  },
+  "nekospy": {
+    "path": "src/nekospy.py",
+    "name": "Nekospy",
+    "desc": "Шпионский модуль: перехват одноразовых медиа и лог удаленных/измененных сообщений",
+    "image": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800&auto=format&fit=crop&q=80",
+    "commands": [".onetime", ".pmspy", ".onetimedump"],
+    "requires": ["telethon"]
+  },
+  "rand": {
+    "path": "src/rand.py",
+    "name": "Rand",
+    "desc": "Модуль для генерации случайных чисел в заданных границах",
+    "image": "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=800&auto=format&fit=crop&q=80",
+    "commands": [".rand"]
+  },
+  "afk": {
+    "path": "src/afk.py",
+    "name": "AFK",
+    "desc": "Автоответчик для ЛС и чатов. Снимается сам при активности или по команде",
+    "image": "https://images.unsplash.com/photo-1511295742362-92c96b124e52?w=800&auto=format&fit=crop&q=80",
+    "commands": [".afk", ".afkhere", ".unafk"]
+  },
+  "tictactoe": {
+    "path": "src/tictactoe.py",
+    "name": "TicTacToe",
+    "desc": "Интерактивная игра в Крестики-Нолики (PvP и против Бота) с инлайн-кнопками",
+    "image": "https://images.unsplash.com/photo-1611996575749-79a3a250f948?w=800&auto=format&fit=crop&q=80",
+    "commands": [".ttt", ".tictactoe"]
+  },
+  "trashguy": {
+    "path": "src/trashguy.py",
+    "name": "TrashGuy",
+    "desc": "Анимация человечка, который выкидывает мусор. С настройкой скорости",
+    "image": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop&q=80",
+    "commands": [".tguy"],
+    "requires": ["grapheme"]
+  },
+  "type": {
+    "path": "src/type.py",
+    "name": "Type text",
+    "desc": "Печатает текст с эффектом печатной машинки и мигающим курсором",
+    "image": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&auto=format&fit=crop&q=80",
+    "commands": [".type"]
+  },
+  "uwu-mode": {
+    "path": "src/uwu_mode.py",
+    "name": "UwU Mode",
+    "desc": "Автоматически превращает твои сообщения в милые (заикание, каомодзи, действия)",
+    "image": "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=800&auto=format&fit=crop&q=80",
+    "commands": [".uwu"]
+  },
+  "yamusic": {
+    "path": "src/yamusic.py",
+    "name": "YaMusic",
+    "desc": "Яндекс.Музыка: автобио по треку, красивый баннер и инфо о том, что играет сейчас",
+    "image": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&auto=format&fit=crop&q=80",
+    "commands": [".ynow", ".ynowt", ".ylike", ".yunlike", ".ybio", ".yset", ".yguide"],
+    "requires": ["aiohttp", "requests", "pillow", "yandex-music"]
+  }
 }
