@@ -92,7 +92,6 @@
     "name": "Delete Mute",
     "desc": "Мутит пользователей путем мгновенного удаления их новых сообщений.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".dmute", ".dunmute", ".dmutelist"],
-    "requires": ["aiohttp"]
+    "commands": [".dmute", ".dunmute", ".dmutelist"]
   }
 }
