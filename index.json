@@ -93,5 +93,13 @@
     "desc": "Мутит пользователей путем мгновенного удаления их новых сообщений.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".dmute", ".dunmute", ".dmutelist"]
+  },
+  "quotes": {
+    "path": "src/quotes.py",
+    "name": "Quotes",
+    "desc": "Создание стикеров-цитат (Quotly стиль). Поддерживает фото, голосовые, музыку, файлы, видео, кружочки, мультицитаты и фейк-цитаты.",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [".q", ".fsq"],
+    "requires": ["aiohttp", "pillow", "telethon"]
   }
 }
