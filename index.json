@@ -98,7 +98,7 @@
     "path": "src/quotes.py",
     "name": "Quotes",
     "desc": "Создание стикеров-цитат (Quotly стиль). Поддерживает фото, голосовые, музыку, файлы, видео, кружочки, мультицитаты и фейк-цитаты.",
-    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Quotes%20module.png?raw=true",
     "commands": [".q", ".fsq"],
     "requires": ["aiohttp", "pillow", "telethon"]
   }
