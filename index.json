@@ -93,5 +93,26 @@
     "desc": "Мутит пользователей путем мгновенного удаления их новых сообщений.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".dmute", ".dunmute", ".dmutelist"]
+  },
+  "hentai": {
+    "path": "src/hentai.py",
+    "name": "Hentai",
+    "desc": "Отправляет случайные hentai/sfw/furry медиа",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [".loli", ".fem", ".sfw", ".furry", ".nsfw"]
+  },
+  "doxtool": {
+    "path": "src/doxtool.py",
+    "name": "DoxTool",
+    "desc": "Шуточный модуль для 'деанона'. Создан в развлекательных целях.",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [".gb", ".deanon", ".dinfo"]
+  },
+  "compliments": {
+    "path": "src/compliments.py",
+    "name": "Compliments",
+    "desc": "Отправляет комплименты пользователю",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [".cg"]
   }
 }
