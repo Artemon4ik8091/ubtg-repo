@@ -2,7 +2,7 @@
 # Name: Compliments
 # Description: Compliments for your partner (Random & Animated Series)
 # Author: @codrago_m & AI
-# Adapted for New Userbot Architecture
+# Adapted for New Userbot Architecture.
 # ---------------------------------------------------------------------------------
 
 import asyncio
