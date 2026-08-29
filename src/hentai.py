@@ -14,7 +14,7 @@ from registry import register_cmd, set_module_meta
 
 set_module_meta(
     name="Hentai",
-    desc="Отправляет случайные hentai/sfw/furry медиа",
+    desc="Отправляет случайные непристойные картинки с лолями/аниме-тяночками/фурриями и фембоями",
     system=False
 )
 

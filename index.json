@@ -97,7 +97,7 @@
   "hentai": {
     "path": "src/hentai.py",
     "name": "Hentai",
-    "desc": "Отправляет случайные hentai/sfw/furry медиа",
+    "desc": "Отправляет случайные непристойные картинки с лолями/аниме-тяночками/фурриями и фембоями",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".loli", ".fem", ".sfw", ".furry", ".nsfw"]
   },
