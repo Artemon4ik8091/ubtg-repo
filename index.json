@@ -114,5 +114,12 @@
     "desc": "Отправляет комплименты пользователю",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".cg"]
+  },
+  "triggers": {
+    "path": "src/triggers.py",
+    "name": "Triggers",
+    "desc": "Автоматически отправляет сообщения при определенных условиях",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [".taddbase", ".tadd", ".triggers", ".tchat", ".tdel", ".tget", ".tset", ".tupd", ".tconfig"]
   }
 }
