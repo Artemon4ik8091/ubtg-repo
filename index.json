@@ -121,5 +121,12 @@
     "desc": "Автоматически отправляет сообщения при определенных условиях",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".taddbase", ".tadd", ".triggers", ".tchat", ".tdel", ".tget", ".tset", ".tupd", ".tconfig"]
+  },
+  "tagall": {
+    "path": "src/tagall.py",
+    "name": "TagAll",
+    "desc": "Отмечает всех участников чата с возможностью отмены.",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [".tagall"]
   }
 }
