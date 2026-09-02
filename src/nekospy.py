@@ -13,6 +13,9 @@ CACHE_DIR = "nekospy_cache"
 # Структура: {message_id: {"text": "текст", "sender_name": "Имя", "has_media": bool, "media_path": str/None}}
 pm_cache = {}
 
+# Множество для отслеживания файлов, которые собеседник удалил ПРЯМО ВО ВРЕМЯ нашей фоновой загрузки
+deleted_pending_media = set()
+
 # 1. Задаем метаданные для отображения в списке модулей
 set_module_meta(
     "Nekospy",
@@ -72,8 +75,13 @@ async def set_dump_chat(client, event, args):
                                 f"Текущий чат: `{current_dump}`\n"
                                 f"Пример: `.onetimedump me`")
 
-    set_config(MODULE_ID, "dump_chat", args)
-    await event.edit(f"✅ **Чат для перехвата успешно установлен на:** `{args}`")
+    arg = args.strip()
+    # Исправление бага Telethon: конвертируем в число, если передан ID, иначе Telethon выдаст ошибку
+    if arg.lstrip("-").isdigit():
+        arg = int(arg)
+
+    set_config(MODULE_ID, "dump_chat", arg)
+    await event.edit(f"✅ **Чат для перехвата успешно установлен на:** `{arg}`")
 
 @register_bg()
 async def nekospy_interceptor_bg(client):
@@ -85,8 +93,66 @@ async def nekospy_interceptor_bg(client):
         shutil.rmtree(CACHE_DIR, ignore_errors=True)
     os.makedirs(CACHE_DIR, exist_ok=True)
 
+    # Асинхронная задача загрузки медиа (чтобы не блокировать хендлер)
+    async def background_download(m_id, message, file_size):
+        try:
+            max_cache_bytes = 500 * 1024 * 1024  # 500 МБ
+            current_size = 0
+            
+            if os.path.exists(CACHE_DIR):
+                current_size = sum(
+                    os.path.getsize(os.path.join(CACHE_DIR, f)) 
+                    for f in os.listdir(CACHE_DIR) 
+                    if os.path.isfile(os.path.join(CACHE_DIR, f))
+                )
+                
+                # Если места не хватает, чистим старые файлы
+                if current_size + file_size > max_cache_bytes:
+                    for k in list(pm_cache.keys()):
+                        if current_size + file_size <= max_cache_bytes:
+                            break
+                        mp = pm_cache[k].get("media_path")
+                        if mp and os.path.exists(mp):
+                            try:
+                                sz = os.path.getsize(mp)
+                                os.remove(mp)
+                                current_size -= sz
+                                pm_cache[k]["media_path"] = None 
+                            except:
+                                pass
+
+            if current_size + file_size <= max_cache_bytes:
+                # Скачиваем файл
+                path = await client.download_media(message, file=f"{CACHE_DIR}/")
+                if not path:
+                    return
+
+                if m_id in pm_cache:
+                    pm_cache[m_id]["media_path"] = path
+                    pm_cache[m_id]["downloading"] = False
+                elif m_id in deleted_pending_media:
+                    # СУПЕР-ФИЧА: Если сообщение удалили, пока мы его качали, мы сразу кидаем дамп!
+                    dump_chat = get_config(MODULE_ID, "dump_chat")
+                    caption = "🗑 **[ДОСКАЧАНО] Медиа было удалено во время загрузки!** 📎"
+                    try:
+                        await client.send_file(dump_chat, path, caption=caption)
+                    except Exception as e:
+                        print(f"[Nekospy] Ошибка досыла медиа: {e}")
+                    finally:
+                        if os.path.exists(path):
+                            os.remove(path)
+                else:
+                    # Вытеснено из кэша по лимиту (2000 шт)
+                    if os.path.exists(path):
+                        os.remove(path)
+        except Exception as e:
+            print(f"[Nekospy] ❌ Ошибка фоновой загрузки: {e}")
+        finally:
+            deleted_pending_media.discard(m_id)
+
+
     # ==========================================
-    # 1. ОБРАБОТЧИК НОВЫХ СООБЩЕНИЙ (Перехват TTL + Кэш ЛС)
+    # 1. ОБРАБОТЧИК НОВЫХ СООБЩЕНИЙ
     # ==========================================
     async def incoming_handler(incoming_event):
         if not get_config(MODULE_ID, "enabled"):
@@ -98,96 +164,54 @@ async def nekospy_interceptor_bg(client):
         if msg.media:
             ttl = getattr(msg.media, 'ttl_seconds', None)
             if ttl is not None:
-                print(f"[Nekospy] 🔥 Обнаружено сгорающее медиа! (TTL: {ttl} сек). Пытаюсь скачать...")
                 dump_chat = get_config(MODULE_ID, "dump_chat")
                 path = None
-
                 try:
                     sender = await incoming_event.get_sender()
                     sender_name = getattr(sender, 'first_name', 'Неизвестный')
-
                     path = await client.download_media(msg)
-
-                    if not path:
-                        print("[Nekospy] ❌ Ошибка: Telethon вернул пустой путь (файл не скачан).")
-                    else:
+                    if path:
                         caption = (f"🔥 **Перехвачено одноразовое медиа!**\n"
                                    f"👤 **От:** {sender_name}")
                         await client.send_file(dump_chat, path, caption=caption)
-                        print("[Nekospy] ✅ Файл успешно переслан!")
-
                 except Exception as e:
                     print(f"[Nekospy] ❌ Критическая ошибка при перехвате: {e}")
-
                 finally:
                     if path and os.path.exists(path):
                         os.remove(path)
-                return # Одноразовые медиа мы уже обработали, в кэш ЛС их не пишем
+                return 
 
         # --- БЛОК КЭШИРОВАНИЯ ЛС (ДЛЯ ШПИОНА) ---
         if get_config(MODULE_ID, "track_pm") and incoming_event.is_private and not incoming_event.out:
             sender = await incoming_event.get_sender()
             sender_name = getattr(sender, 'first_name', 'Неизвестный')
             
-            media_path = None
+            has_med = bool(msg.media)
             
-            # Если есть медиа и кэширование включено
-            if msg.media and get_config(MODULE_ID, "track_pm_media", default=True):
-                # Проверяем размер файла (не скачиваем файлы больше 50 МБ)
-                if hasattr(msg, 'file') and msg.file and msg.file.size:
-                    if msg.file.size <= 50 * 1024 * 1024:
-                        max_cache_bytes = 500 * 1024 * 1024  # Жёсткий лимит 500 МБ
-                        current_size = 0
-                        
-                        if os.path.exists(CACHE_DIR):
-                            # Считаем текущий размер всех файлов в папке кэша
-                            current_size = sum(
-                                os.path.getsize(os.path.join(CACHE_DIR, f)) 
-                                for f in os.listdir(CACHE_DIR) 
-                                if os.path.isfile(os.path.join(CACHE_DIR, f))
-                            )
-                            
-                            # Если новый файл превышает лимит в 500 МБ, очищаем старые медиа
-                            if current_size + msg.file.size > max_cache_bytes:
-                                print(f"[Nekospy] 🧹 Кэш достигает лимита ({current_size/1024/1024:.1f} МБ). Освобождаем место...")
-                                
-                                # Словари в Python сохраняют порядок добавления, поэтому первые ключи — самые старые
-                                for k in list(pm_cache.keys()):
-                                    if current_size + msg.file.size <= max_cache_bytes:
-                                        break
-                                    
-                                    mp = pm_cache[k].get("media_path")
-                                    if mp and os.path.exists(mp):
-                                        try:
-                                            sz = os.path.getsize(mp)
-                                            os.remove(mp)
-                                            current_size -= sz
-                                            pm_cache[k]["media_path"] = None # Отвязываем удаленный файл
-                                        except Exception:
-                                            pass
-
-                        # Скачиваем файл только если успешно освободили место (или оно изначально было)
-                        if current_size + msg.file.size <= max_cache_bytes:
-                            try:
-                                media_path = await client.download_media(msg, file=f"{CACHE_DIR}/")
-                            except Exception as e:
-                                print(f"[Nekospy] ❌ Ошибка загрузки медиа в кэш: {e}")
-                        else:
-                            print(f"[Nekospy] ⚠️ Не удалось освободить место, медиа пропущено.")
-
+            # ВАЖНО: Сразу пишем в кэш! Это решает проблему удаления во время загрузки.
             pm_cache[msg.id] = {
                 "text": msg.text,
                 "sender_name": sender_name,
-                "has_media": bool(msg.media),
-                "media_path": media_path
+                "has_media": has_med,
+                "media_path": None,
+                "downloading": has_med
             }
 
-            # Очистка памяти кэша, чтобы он не рос бесконечно
+            if has_med and get_config(MODULE_ID, "track_pm_media", default=True):
+                file_size = getattr(msg.file, 'size', 0) if (hasattr(msg, 'file') and msg.file) else 0
+                if file_size <= 50 * 1024 * 1024:
+                    # Запускаем загрузку в фоне, не стопоря основной хендлер
+                    asyncio.create_task(background_download(msg.id, msg, file_size))
+                else:
+                    pm_cache[msg.id]["downloading"] = False
+            else:
+                pm_cache[msg.id]["downloading"] = False
+
+            # Очистка памяти кэша
             if len(pm_cache) > 2000:
                 keys_to_delete = list(pm_cache.keys())[:500]
                 for k in keys_to_delete:
                     data = pm_cache.pop(k, None)
-                    # Удаляем физический файл, если он кэшировался
                     if data and data.get("media_path") and os.path.exists(data["media_path"]):
                         try:
                             os.remove(data["media_path"])
@@ -218,6 +242,9 @@ async def nekospy_interceptor_bg(client):
                                f"❌ **Было:**\n`{old_text}`\n\n"
                                f"✅ **Стало:**\n`{new_text}`")
                     try:
+                        # Защита от превышения лимитов длины сообщения
+                        if len(caption) > 4096:
+                            caption = caption[:4090] + "..."
                         await client.send_message(dump_chat, caption)
                     except Exception as e:
                         print(f"[Nekospy] Ошибка отправки уведомления об изменении: {e}")
@@ -229,7 +256,8 @@ async def nekospy_interceptor_bg(client):
                     "text": event.text,
                     "sender_name": getattr(sender, 'first_name', 'Неизвестный'),
                     "has_media": bool(event.media),
-                    "media_path": None
+                    "media_path": None,
+                    "downloading": False
                 }
 
 
@@ -248,9 +276,17 @@ async def nekospy_interceptor_bg(client):
                 sender_name = old_data["sender_name"]
                 old_text = old_data["text"] or "<Без текста>"
                 media_path = old_data.get("media_path")
+                is_downloading = old_data.get("downloading", False)
                 
-                # Если файл не скачался/не кэшировался, но медиа там было, добавляем пометку
-                media_info = " 📎 [Медиа-файл]" if old_data.get("has_media") and not (media_path and os.path.exists(media_path)) else ""
+                media_info = ""
+                if old_data.get("has_media"):
+                    if media_path and os.path.exists(media_path):
+                        media_info = " 📎 [Медиа-файл]"
+                    elif is_downloading:
+                        media_info = " ⏳ [Загружается... Пришлю как докачается!]"
+                        deleted_pending_media.add(msg_id)
+                    else:
+                        media_info = " 📎 [Медиа-файл не кэшировался]"
                 
                 if old_text == "<Без текста>" and media_info == "":
                      old_text = "<Только медиа>"
@@ -260,12 +296,16 @@ async def nekospy_interceptor_bg(client):
                            f"💬 **Текст:**\n`{old_text}`{media_info}")
                 
                 try:
-                    # Если медиа удалось перехватить - отправляем его
                     if media_path and os.path.exists(media_path):
-                        await client.send_file(dump_chat, media_path, caption=caption)
-                        os.remove(media_path) # Удаляем после пересылки
+                        # Telegram не позволяет делать подписи к фото длиннее 1024 символов
+                        if len(caption) > 1024:
+                            await client.send_message(dump_chat, caption[:4090] + "...")
+                            await client.send_file(dump_chat, media_path)
+                        else:
+                            await client.send_file(dump_chat, media_path, caption=caption)
+                        os.remove(media_path)
                     else:
-                        await client.send_message(dump_chat, caption)
+                        await client.send_message(dump_chat, caption[:4090] + "...")
                 except Exception as e:
                     print(f"[Nekospy] Ошибка отправки уведомления об удалении: {e}")
 
