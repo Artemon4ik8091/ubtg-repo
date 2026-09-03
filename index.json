@@ -128,5 +128,12 @@
     "desc": "Отмечает всех участников чата с возможностью отмены.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
     "commands": [".tagall"]
+  },
+  "gemini": {
+    "path": "src/gemini.py",
+    "name": "Gemini",
+    "desc": "Интеграция с Google Gemini для генерации текста и ответов на вопросы.",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Gemini%20module.png?raw=true",
+    "commands": [".ai", ".gemini", ".gemini_key", ".gemini_rules", ".gemini_model", ".gemini_models", ".gemini_temp", ".gemini_history", ".gemini_reset", ".gemini_clear", ".gemini_collapse", ".gemini_proxy", ".gemini_instruction", ".gemini_guide", ".gemini_setup", ".gemini_help"]
   }
 }
