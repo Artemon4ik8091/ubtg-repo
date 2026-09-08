@@ -46,7 +46,7 @@ init_config(__name__, {
     ),
     "autobio_text": "{performer} — {title}",
     "no_playing_bio_text": "🎧 Сейчас ничего не слушаю",
-    "banner_version": "new",   # "new" или "old"
+    "banner_version": "old",   # "new" или "old"
     "autobio_enabled": False,
 })
 
@@ -191,66 +191,147 @@ class Banners:
 
     def old(self):
         w, h = 1920, 768
-        title_font = _get_font("onest_bold", 80)
-        art_font = _get_font("onest_regular", 55)
-        time_font = _get_font("onest_bold", 36)
+        title_font = _get_font("onest_bold", 78)
+        art_font = _get_font("onest_regular", 46)
+        time_font = _get_font("onest_bold", 34)
+        badge_font = _get_font("onest_bold", 24)
 
-        track_cov = Image.open(io.BytesIO(self.track_cover)).convert("RGBA")
+        # 1. Фон: блюр + затемнение
+        track_cov_raw = Image.open(io.BytesIO(self.track_cover)).convert("RGBA")
         banner = (
-            track_cov.resize((w, w))
+            track_cov_raw.resize((w, w))
             .crop((0, (w - h) // 2, w, ((w - h) // 2) + h))
-            .filter(ImageFilter.GaussianBlur(radius=14))
+            .filter(ImageFilter.GaussianBlur(radius=18))
         )
-        banner = ImageEnhance.Brightness(banner).enhance(0.3)
+        banner = ImageEnhance.Brightness(banner).enhance(0.35)
 
-        track_cov = track_cov.resize((banner.size[1] - 150, banner.size[1] - 150))
-        mask = Image.new("L", track_cov.size, 0)
+        # Мягкий градиент затемнения справа для идеальной читаемости
+        vignette = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        v_draw = ImageDraw.Draw(vignette)
+        for x_coord in range(650, w):
+            alpha = int(140 * ((x_coord - 650) / (w - 650)))
+            v_draw.line([(x_coord, 0), (x_coord, h)], fill=(0, 0, 0, alpha))
+        banner = Image.alpha_composite(banner, vignette)
+
+        # 2. Подготовка скруглённой обложки
+        cover_size = h - 150  # 618x618
+        cover_pos = (75, 75)
+        cover = track_cov_raw.resize((cover_size, cover_size), Image.Resampling.LANCZOS)
+        
+        mask = Image.new("L", (cover_size, cover_size), 0)
         ImageDraw.Draw(mask).rounded_rectangle(
-            (0, 0, track_cov.size[0], track_cov.size[1]), radius=35, fill=255
+            (0, 0, cover_size, cover_size), radius=42, fill=255
         )
-        track_cov.putalpha(mask)
-        track_cov = track_cov.crop(track_cov.getbbox())
-        banner.paste(track_cov, (75, 75), mask)
+        cover.putalpha(mask)
 
-        title_lines = textwrap.wrap(self.title, 23)
-        if len(title_lines) > 1:
-            title_lines[1] = title_lines[1] + "..." if len(title_lines) > 2 else title_lines[1]
-        title_lines = title_lines[:2]
-        artists_lines = textwrap.wrap(" • ".join(self.artists), width=40)
-        if len(artists_lines) > 1:
-            for index, art in enumerate(artists_lines):
-                if "•" in art[-2:]:
-                    artists_lines[index] = art[: art.rfind("•") - 1]
+        # 3. Вставляем обложку поверх фона (убрали тяжелые тени для чистого вида)
+        banner.paste(cover, cover_pos, cover)
 
-        draw = ImageDraw.Draw(banner)
-        x, y = 150 + track_cov.size[0], 110
-        for index, line in enumerate(title_lines):
-            draw.text((x, y), line, font=title_font, fill="#FFFFFF")
-            if index != len(title_lines) - 1:
-                y += 70
-        x, y = 150 + track_cov.size[0], 110 * 2
-        if len(title_lines) > 1:
-            y += 70
-        for index, line in enumerate(artists_lines):
-            draw.text((x, y), line, font=art_font, fill="#A0A0A0")
-            if index != len(artists_lines) - 1:
-                y += 50
+        # Создаем слой для отрисовки графики с правильным альфа-каналом
+        # Это предотвращает баг с заливкой прозрачных элементов сплошным белым цветом
+        overlay = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(overlay)
 
-        draw.rounded_rectangle([768, 650, 768 + 1072, 650 + 15], radius=7, fill="#A0A0A0")
+        # 4. Бейдж «СЕЙЧАС ИГРАЕТ»
+        badge_x, badge_y = 760, 115
+        badge_text = "СЕЙЧАС ИГРАЕТ"
+        bw, bh = self._measure(badge_text, badge_font, draw)
+        pad_x, pad_y = 18, 9
+        pill_w = bw + pad_x * 2 + 22
+        pill_h = bh + pad_y * 2
+
         draw.rounded_rectangle(
-            [768, 650, 768 + int(1072 * (self.progress / self.duration)), 650 + 15],
-            radius=7, fill="#FFFFFF",
+            (badge_x, badge_y, badge_x + pill_w, badge_y + pill_h),
+            radius=pill_h // 2,
+            fill=(255, 255, 255, 45), # Теперь полупрозрачный фон бейджа отрендерится корректно
+        )
+        dot_r = 5
+        dot_cy = badge_y + pill_h // 2
+        draw.ellipse(
+            (badge_x + pad_x, dot_cy - dot_r, badge_x + pad_x + dot_r * 2, dot_cy + dot_r),
+            fill="#FF4B4B",
         )
         draw.text(
-            (768, 600),
-            f"{(self.progress // 1000 // 60):02}:{(self.progress // 1000 % 60):02}",
-            font=time_font, fill="#FFFFFF",
+            (badge_x + pad_x + dot_r * 2 + 10, badge_y + pad_y - 1),
+            badge_text,
+            font=badge_font,
+            fill=(255, 255, 255, 255),
         )
-        draw.text(
-            (1745, 600),
-            f"{(self.duration // 1000 // 60):02}:{(self.duration // 1000 % 60):02}",
-            font=time_font, fill="#FFFFFF",
+
+        # 5. Название трека и артисты
+        text_x = 760
+        title_y = badge_y + pill_h + 32
+
+        title_lines = textwrap.wrap(self.title, width=22)
+        if len(title_lines) > 2:
+            title_lines = title_lines[:2]
+            title_lines[-1] = title_lines[-1].rstrip() + "…"
+        elif len(title_lines) == 2 and len(self.title) > 40:
+            title_lines[-1] = title_lines[-1].rstrip() + "…"
+
+        curr_y = title_y
+        for line in title_lines:
+            draw.text((text_x, curr_y), line, font=title_font, fill="#FFFFFF")
+            curr_y += 82
+
+        # Исполнители (убираем висячие буллеты)
+        artists_str = " • ".join(self.artists)
+        artist_lines = textwrap.wrap(artists_str, width=38)
+        if len(artist_lines) > 1:
+            artist_lines = artist_lines[:1]
+            cleaned = artist_lines[0].rstrip()
+            while cleaned.endswith("•") or cleaned.endswith(" "):
+                cleaned = cleaned[:-1].rstrip()
+            artist_lines[0] = cleaned + "…"
+
+        curr_y += 6
+        for line in artist_lines:
+            draw.text((text_x, curr_y), line, font=art_font, fill=(255, 255, 255, 185))
+            curr_y += 54
+
+        # 6. Прогресс-бар со скруббером
+        bar_x = 760
+        bar_w = 1080
+        bar_y = 678
+        bar_h = 10
+        time_y = bar_y - 42
+
+        # Тайминги
+        prog_min, prog_sec = self.progress // 1000 // 60, self.progress // 1000 % 60
+        dur_min, dur_sec = self.duration // 1000 // 60, self.duration // 1000 % 60
+        dur_str = f"{dur_min:02}:{dur_sec:02}"
+        dur_w, _ = self._measure(dur_str, time_font, draw)
+
+        draw.text((bar_x, time_y), f"{prog_min:02}:{prog_sec:02}", font=time_font, fill="#FFFFFF")
+        draw.text((bar_x + bar_w - dur_w, time_y), dur_str, font=time_font, fill="#FFFFFF")
+
+        # Подложка и заполнение
+        ratio = min(max(self.progress / max(self.duration, 1), 0.0), 1.0)
+        fill_w = int(bar_w * ratio)
+
+        draw.rounded_rectangle(
+            (bar_x, bar_y, bar_x + bar_w, bar_y + bar_h),
+            radius=bar_h // 2,
+            fill=(255, 255, 255, 45),
         )
+        if fill_w > 0:
+            draw.rounded_rectangle(
+                (bar_x, bar_y, bar_x + fill_w, bar_y + bar_h),
+                radius=bar_h // 2,
+                fill="#FFFFFF",
+            )
+
+        # Бегунок (кругляш)
+        thumb_x = bar_x + fill_w
+        thumb_y = bar_y + bar_h // 2
+        thumb_r = 9
+        draw.ellipse(
+            (thumb_x - thumb_r, thumb_y - thumb_r, thumb_x + thumb_r, thumb_y + thumb_r),
+            fill="#FFFFFF",
+        )
+        
+        # Сливаем наш overlay-слой с текстами и прозрачным бейджем поверх базового фона
+        banner = Image.alpha_composite(banner, overlay)
 
         by = io.BytesIO()
         banner.save(by, format="PNG")
@@ -396,7 +477,6 @@ async def _download_track(ym_client, track_id):
                 continue
             raise
 
-
 async def _resolve_playing_from(ym_client, now: dict) -> str:
     entity_type = now["entity_type"]
     if entity_type not in ENTITY_TYPES:
@@ -463,7 +543,6 @@ async def _apply_bio_text(client, text: str):
         await asyncio.sleep(max(e.seconds, 60))
     except Exception as e:
         logger.error(f"[YaMusic] Не удалось обновить био: {e}")
-
 
 async def _update_bio_once(client):
     token = get_config(__name__, "token")
