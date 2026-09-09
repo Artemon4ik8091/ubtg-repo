@@ -4,10 +4,10 @@ import os
 import shutil
 import asyncio
 from telethon import events
-from registry import register_cmd, set_module_meta, register_bg, init_config, get_config, set_config
+from registry import register_cmd, set_module_meta, register_bg, init_config, get_config, set_config, get_cache_dir
 
 MODULE_ID = "Nekospy"
-CACHE_DIR = "nekospy_cache"
+CACHE_DIR = get_cache_dir("nekospy")
 
 # Кэш сообщений для отслеживания удалений и редактирований в ЛС
 # Структура: {message_id: {"text": "текст", "sender_name": "Имя", "has_media": bool, "media_path": str/None}}
@@ -92,6 +92,11 @@ async def nekospy_interceptor_bg(client):
     if os.path.exists(CACHE_DIR):
         shutil.rmtree(CACHE_DIR, ignore_errors=True)
     os.makedirs(CACHE_DIR, exist_ok=True)
+
+    # Удаляем старую legacy папку кэша в корне, если осталась
+    legacy_cache = os.path.join(os.path.dirname(os.path.dirname(CACHE_DIR)), "nekospy_cache")
+    if os.path.exists(legacy_cache):
+        shutil.rmtree(legacy_cache, ignore_errors=True)
 
     # Асинхронная задача загрузки медиа (чтобы не блокировать хендлер)
     async def background_download(m_id, message, file_size):
