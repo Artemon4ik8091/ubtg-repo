@@ -4,143 +4,275 @@
     "name": "Spammer",
     "desc": "Модуль для спама сообщениями в чаты. Команды: .spam и .stopspam",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".spam", ".stopspam"]
+    "commands": [
+      ".spam",
+      ".stopspam"
+    ]
   },
   "autofarm": {
     "path": "src/auto_farm.py",
     "name": "autofarm",
     "desc": "Раз в заданный интервал шлет сообщение в целевой чат",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Autofarm%20module.png?raw=true",
-    "commands": [".farm"]
+    "commands": [
+      ".farm"
+    ]
   },
   "chat-manager": {
     "path": "src/chat_manager.py",
     "name": "Chat Manager",
     "desc": "Полный комплекс модерации: муты, баны, кики, варны, пурж, пины и права",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".mute", ".unmute", ".ban", ".unban", ".kick", ".warn", ".unwarn", ".del", ".purge", ".pin", ".unpin", ".promote", ".demote", ".slowmode", ".admins"]
+    "commands": [
+      ".mute",
+      ".unmute",
+      ".ban",
+      ".unban",
+      ".kick",
+      ".warn",
+      ".unwarn",
+      ".del",
+      ".purge",
+      ".pin",
+      ".unpin",
+      ".promote",
+      ".demote",
+      ".slowmode",
+      ".admins"
+    ]
   },
   "nekospy": {
     "path": "src/nekospy.py",
     "name": "Nekospy",
     "desc": "Шпионский модуль: перехват одноразовых медиа и лог удаленных/измененных сообщений",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Nekospy%20module.png?raw=true",
-    "commands": [".onetime", ".pmspy", ".onetimedump"],
-    "requires": ["telethon"]
+    "commands": [
+      ".onetime",
+      ".pmspy",
+      ".onetimedump"
+    ],
+    "requires": [
+      "telethon"
+    ]
   },
   "rand": {
     "path": "src/rand.py",
     "name": "Rand",
     "desc": "Модуль для генерации случайных чисел в заданных границах",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".rand"]
+    "commands": [
+      ".rand"
+    ]
   },
   "afk": {
     "path": "src/afk.py",
     "name": "AFK",
     "desc": "Автоответчик для ЛС и чатов. Снимается сам при активности или по команде",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".afk", ".afkhere", ".unafk"]
+    "commands": [
+      ".afk",
+      ".afkhere",
+      ".unafk"
+    ]
   },
   "tictactoe": {
     "path": "src/tictactoe.py",
     "name": "TicTacToe",
     "desc": "Интерактивная игра в Крестики-Нолики (PvP и против Бота) с инлайн-кнопками",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/TicTacToe%20module.png?raw=true",
-    "commands": [".ttt", ".tictactoe"]
+    "commands": [
+      ".ttt",
+      ".tictactoe"
+    ]
   },
   "trashguy": {
     "path": "src/trashguy.py",
     "name": "TrashGuy",
     "desc": "Анимация человечка, который выкидывает мусор. С настройкой скорости",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/TrashGuy%20module.png?raw=true",
-    "commands": [".tguy"],
-    "requires": ["grapheme"]
+    "commands": [
+      ".tguy"
+    ],
+    "requires": [
+      "grapheme"
+    ]
   },
   "type": {
     "path": "src/type.py",
     "name": "Type text",
     "desc": "Печатает текст с эффектом печатной машинки и мигающим курсором",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".type"]
+    "commands": [
+      ".type"
+    ]
   },
   "uwu-mode": {
     "path": "src/uwu_mode.py",
     "name": "UwU Mode",
     "desc": "Автоматически превращает твои сообщения в милые (заикание, каомодзи, действия)",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Uwu-mode%20module.png?raw=true",
-    "commands": [".uwu"]
+    "commands": [
+      ".uwu"
+    ]
   },
   "yamusic": {
     "path": "src/yamusic.py",
     "name": "YaMusic",
     "desc": "Яндекс.Музыка: автобио по треку, красивый баннер и инфо о том, что играет сейчас",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/YaMusic%20module.png?raw=true",
-    "commands": [".ynow", ".ynowt", ".ylike", ".yunlike", ".ybio", ".yset", ".yguide"],
-    "requires": ["aiohttp", "requests", "pillow", "yandex-music"]
+    "commands": [
+      ".ynow",
+      ".ynowt",
+      ".ylike",
+      ".yunlike",
+      ".ybio",
+      ".yset",
+      ".yguide"
+    ],
+    "requires": [
+      "aiohttp",
+      "requests",
+      "pillow",
+      "yandex-music"
+    ]
   },
   "lovemagic": {
     "path": "src/ily.py",
     "name": "LoveMagic",
     "desc": "Известная TikTok анимация переливающихся сердечек",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/LoveMagic%20module.png?raw=true",
-    "commands": [".ily", ".ilygay", "ilyi", ".ilygayi"],
-    "requires": ["aiohttp"]
+    "commands": [
+      ".ily",
+      ".ilygay",
+      "ilyi",
+      ".ilygayi"
+    ],
+    "requires": [
+      "aiohttp"
+    ]
   },
   "dmute": {
     "path": "src/dmute.py",
     "name": "Delete Mute",
     "desc": "Мутит пользователей путем мгновенного удаления их новых сообщений.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".dmute", ".dunmute", ".dmutelist"]
+    "commands": [
+      ".dmute",
+      ".dunmute",
+      ".dmutelist"
+    ]
   },
   "hentai": {
     "path": "src/hentai.py",
     "name": "Hentai",
     "desc": "Отправляет случайные непристойные картинки с лолями/аниме-тяночками/фурриями и фембоями",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".loli", ".fem", ".sfw", ".furry", ".nsfw"]
+    "commands": [
+      ".loli",
+      ".fem",
+      ".sfw",
+      ".furry",
+      ".nsfw"
+    ]
   },
   "doxtool": {
     "path": "src/doxtool.py",
     "name": "DoxTool",
     "desc": "Шуточный модуль для 'деанона'. Создан в развлекательных целях.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".gb", ".deanon", ".dinfo"]
+    "commands": [
+      ".gb",
+      ".deanon",
+      ".dinfo"
+    ]
   },
   "compliments": {
     "path": "src/compliments.py",
     "name": "Compliments",
     "desc": "Отправляет комплименты пользователю",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".cg"]
+    "commands": [
+      ".cg"
+    ]
   },
   "triggers": {
     "path": "src/triggers.py",
     "name": "Triggers",
     "desc": "Автоматически отправляет сообщения при определенных условиях",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".taddbase", ".tadd", ".triggers", ".tchat", ".tdel", ".tget", ".tset", ".tupd", ".tconfig"]
+    "commands": [
+      ".taddbase",
+      ".tadd",
+      ".triggers",
+      ".tchat",
+      ".tdel",
+      ".tget",
+      ".tset",
+      ".tupd",
+      ".tconfig"
+    ]
   },
   "tagall": {
     "path": "src/tagall.py",
     "name": "TagAll",
     "desc": "Отмечает всех участников чата с возможностью отмены.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".tagall"]
+    "commands": [
+      ".tagall"
+    ]
   },
   "gemini": {
     "path": "src/gemini.py",
     "name": "Gemini",
     "desc": "Интеграция с Google Gemini для генерации текста и ответов на вопросы.",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/Gemini%20module.png?raw=true",
-    "commands": [".ai", ".gemini", ".gemini_key", ".gemini_rules", ".gemini_model", ".gemini_models", ".gemini_temp", ".gemini_history", ".gemini_reset", ".gemini_clear", ".gemini_collapse", ".gemini_proxy", ".gemini_instruction", ".gemini_guide", ".gemini_setup", ".gemini_help"]
+    "commands": [
+      ".ai",
+      ".gemini",
+      ".gemini_key",
+      ".gemini_rules",
+      ".gemini_model",
+      ".gemini_models",
+      ".gemini_temp",
+      ".gemini_history",
+      ".gemini_reset",
+      ".gemini_clear",
+      ".gemini_collapse",
+      ".gemini_proxy",
+      ".gemini_instruction",
+      ".gemini_guide",
+      ".gemini_setup",
+      ".gemini_help"
+    ]
   },
   "spotify": {
     "path": "src/spotify.py",
     "name": "Spotify",
     "desc": "Интеграция со Spotify: управление плеером, авто-статус",
     "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
-    "commands": [".sauth", ".scode", ".sunauth", ".srepeat", ".sderepeat", ".snext", ".spause", ".sback", ".sbegin", ".slike", ".sbio", ".splay", ".snow"]
+    "commands": [
+      ".sauth",
+      ".scode",
+      ".sunauth",
+      ".srepeat",
+      ".sderepeat",
+      ".snext",
+      ".spause",
+      ".sback",
+      ".sbegin",
+      ".slike",
+      ".sbio",
+      ".splay",
+      ".snow"
+    ]
+  },
+  "agro-mode": {
+    "path": "src/agro_mode.py",
+    "name": "Agrooo",
+    "desc": "Делает из тебя агрессора на минималках. Токсик из токсиков, малолетка из малолеток.",
+    "image": "https://github.com/Artemon4ik8091/ubtg-repo/blob/main/images/null.png?raw=true",
+    "commands": [
+      ".agro"
+    ]
   }
 }
